@@ -1,0 +1,124 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "User Management API",
+      "description": "API documentation for the User Management microservice",
+      "version": "1.0.0"
+    },
+    "host": "localhost:5000",
+    "basePath": "/",
+    "schemes": ["http"],
+    "paths": {
+      "/register": {
+        "post": {
+          "summary": "Register a new user",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/RegisterUser"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "User registered successfully"
+            }
+          }
+        }
+      },
+      "/login": {
+        "post": {
+          "summary": "Login a user",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/LoginUser"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful login"
+            },
+            "401": {
+              "description": "Invalid credentials"
+            }
+          }
+        }
+      },
+      "/profile": {
+        "get": {
+          "summary": "Get user profile",
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User profile retrieved successfully",
+              "schema": {
+                "$ref": "#/definitions/UserProfile"
+              }
+            },
+            "401": {
+              "description": "Unauthorized access"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "RegisterUser": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginUser": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securityDefinitions": {
+      "BearerAuth": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Enter your bearer token in the format 'Bearer <token>'"
+      }
+    }
+  }
+  
