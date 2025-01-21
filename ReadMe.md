@@ -31,14 +31,15 @@ Ensure you have the following installed:
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd <repository-name>
+   git clone https://github.com/stwins60/flask-user-management.git
+   cd flask-user-management
    ```
 
 2. Create and activate a virtual environment:
    ```bash
    python3 -m venv venv
-   source venv/bin/activate   # On Windows use `venv\Scripts\activate`
+   source venv/bin/activate   
+   # On Windows use `venv\Scripts\activate`
    ```
 
 3. Install dependencies:
@@ -49,8 +50,8 @@ Ensure you have the following installed:
 4. Set up the environment variables by creating a `.env` file:
    ```env
    DATABASE_URL=postgresql://user:password@localhost:5432/userdb
-   JWT_SECRET_KEY=your_secret_key
    ```
+    
 
 5. Initialize the database:
    ```bash
@@ -64,17 +65,8 @@ Ensure you have the following installed:
 
 7. Access the application at `http://localhost:5000`
 
-## Running with Docker
+8. Access the API documentation at `http://localhost:5000/api/docs`
 
-1. Build the Docker image:
-   ```bash
-   docker build -t flask-user-management .
-   ```
-
-2. Run the container:
-   ```bash
-   docker run -p 5000:5000 --env-file .env flask-user-management
-   ```
 
 ## API Endpoints
 

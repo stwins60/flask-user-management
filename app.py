@@ -6,6 +6,8 @@ from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 import os
+import secrets
+
 
 # Load environment variables
 load_dotenv()
@@ -14,7 +16,7 @@ app = Flask(__name__)
 CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost:5432/userdb')
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'your_secret_key')
+app.config['JWT_SECRET_KEY'] = secrets.token_hex(64)
 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
@@ -52,8 +54,39 @@ def login():
 def profile():
     current_user = get_jwt_identity()
     user = User.query.filter_by(email=current_user).first()
-    print(user)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
     return jsonify(full_name=user.full_name, email=user.email)
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        'message': 'Resource not found. Please use /api/docs for documentation.'
+        }), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify({'message': 'Internal server error'}), 500
+
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({'message': 'Bad request'}), 400
+
+@app.errorhandler(401)
+def unauthorized(error):
+    return jsonify({'message': 'Unauthorized'}), 401
+
+@app.errorhandler(403)
+def forbidden(error):
+    return jsonify({'message': 'Forbidden'}), 403
+
+@app.errorhandler(409)
+def conflict(error):
+    return jsonify({'message': 'Conflict'}), 409
+
+@app.errorhandler(422)
+def unprocessable_entity(error):
+    return jsonify({'message': 'Unprocessable entity'}), 422
 
 # Swagger documentation setup
 SWAGGER_URL = '/api/docs'
